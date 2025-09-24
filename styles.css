@@ -1,0 +1,718 @@
+/*==========================================================
+  ---  PALETA DE COLORES Y VARIABLES  ---
+  ==========================================================*/
+:root {
+  --green-dark: #2e7d32;
+  --green-medium: #4caf50;
+  --green-light: #81c784;
+  --green-accent: #689f38;
+  --bg-light: #f1f8e9;
+  --bg-dark: #1b5e20;
+  --text-dark: #333;
+  --text-light: #fff;
+  --border-color: #ccc;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-heavy: rgba(0, 0, 0, 0.2);
+}
+
+/*==========================================================
+  ---  ESTILOS BASE Y GENERALES  ---
+  ==========================================================*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: var(--text-dark);
+  line-height: 1.6;
+  background-color: var(--bg-light);
+  display: flex;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  color: var(--green-dark);
+}
+
+a {
+  color: var(--green-medium);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--green-accent);
+}
+
+/*==========================================================
+  ---  CONTENEDOR PRINCIPAL  ---
+  ==========================================================*/
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Esconde las secciones no activas con una transición */
+.view {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.view.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/*==========================================================
+  ---  SIDEBAR (Menú Lateral)  ---
+  ==========================================================*/
+.sidebar {
+  width: 250px;
+  background-color: var(--green-dark);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  box-shadow: 2px 0 8px var(--shadow-heavy);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.brand img {
+  width: 90px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.brand img:hover {
+  transform: scale(1.05);
+}
+
+.brand h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--green-light);
+  letter-spacing: 1px;
+}
+
+.menu {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border: none;
+  background-color: transparent;
+  color: var(--bg-light);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.menu-item.active {
+  background-color: var(--green-accent);
+  color: var(--text-light);
+  font-weight: 600;
+  box-shadow: 0 4px 6px var(--shadow-heavy);
+}
+
+.menu-item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.contact {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 1.5rem;
+}
+
+.contact h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: var(--green-light);
+}
+
+.contact ul {
+  list-style: none;
+  font-size: 0.9rem;
+  color: var(--bg-light);
+  opacity: 0.8;
+}
+
+.contact li {
+  margin-bottom: 0.5rem;
+}
+
+.small {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 1.5rem;
+}
+
+/*==========================================================
+  ---  SECCIONES DE CONTENIDO  ---
+  ==========================================================*/
+
+/* HERO Section */
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 4rem 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--green-medium),
+    var(--green-accent)
+  );
+  color: var(--text-light);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px var(--shadow-light);
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hero h2 {
+  font-size: 2.8rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.hero p {
+  font-size: 1.3rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: var(--text-light);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--shadow-light);
+  border-left: 6px solid var(--green-medium);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px var(--shadow-light);
+}
+
+.card h3 {
+  color: var(--green-dark);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--green-light);
+  padding-bottom: 0.75rem;
+}
+
+.bullets {
+  list-style: none;
+  padding-left: 0;
+}
+
+.bullets li {
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.bullets li::before {
+  content: "🌿";
+  position: absolute;
+  left: 0;
+  color: var(--green-accent);
+}
+
+/*==========================================================
+  ---  FORMULARIOS (Registro, Login)  ---
+  ==========================================================*/
+.form {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background-color: var(--text-light);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px var(--shadow-light);
+}
+
+.form h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--green-dark);
+}
+
+.form label {
+  display: block;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.form input {
+  width: 100%;
+  padding: 0.9rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: var(--green-medium);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--green-dark);
+  color: var(--text-light);
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 2rem;
+}
+
+.btn:hover {
+  background-color: var(--green-accent);
+  transform: translateY(-2px);
+}
+
+.form-msg {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-weight: 600;
+  color: var(--green-medium);
+}
+
+/*==========================================================
+  ---  SECCIÓN DE HOJA DE VIDA (CV)  ---
+  ==========================================================*/
+.header {
+  background-color: var(--green-dark);
+  color: var(--text-light);
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 8px var(--shadow-heavy);
+  border-radius: 10px;
+  margin-bottom: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--green-light);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-tabs {
+  display: flex;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-tab {
+  padding: 0.9rem 1.75rem;
+  border: none;
+  background-color: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.nav-tab:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-tab.active {
+  background-color: var(--green-accent);
+  font-weight: 600;
+  box-shadow: 0 2px 5px var(--shadow-heavy);
+  border-radius: 8px;
+}
+
+.dark-mode-btn {
+  background: none;
+  border: 1px solid var(--text-light);
+  color: var(--text-light);
+  padding: 0.75rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dark-mode-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: rotate(360deg);
+}
+
+.main-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-container,
+.submissions-header,
+.analytics-grid,
+.analytics-details {
+  background-color: var(--text-light);
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--shadow-light);
+  margin-bottom: 2rem;
+}
+
+.form-title,
+.analytics-title {
+  text-align: center;
+  color: var(--green-dark);
+  margin-bottom: 2rem;
+}
+
+.job-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-wrapper,
+.textarea-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon,
+.textarea-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--green-medium);
+}
+
+.job-form input,
+.job-form select,
+.job-form textarea {
+  width: 100%;
+  padding: 1rem;
+  padding-left: 45px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.job-form input:focus,
+.job-form select:focus,
+.job-form textarea:focus {
+  outline: none;
+  border-color: var(--green-medium);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.job-form textarea {
+  height: 120px;
+  padding: 1rem;
+  padding-left: 45px;
+  resize: vertical;
+}
+
+.social-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.file-upload {
+  border: 2px dashed var(--green-light);
+  padding: 3rem;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.file-upload:hover {
+  border-color: var(--green-medium);
+  background-color: var(--bg-light);
+}
+
+.file-upload-area .fas {
+  font-size: 3rem;
+  color: var(--green-medium);
+  margin-bottom: 0.75rem;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1.1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/*==========================================================
+  ---  SECCIÓN DE SUBMISSIONS  ---
+  ==========================================================*/
+.submissions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  flex-grow: 1;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 3rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--green-medium);
+}
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filters select,
+.filters button {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-light);
+  cursor: pointer;
+}
+
+.submissions-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.submission-card {
+  background-color: var(--bg-light);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px var(--shadow-light);
+  border-left: 6px solid var(--green-medium);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px var(--shadow-light);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  color: var(--green-dark);
+}
+
+.card-status {
+  padding: 0.3rem 0.9rem;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-pending { background-color: #ffeb3b; color: #795548; }
+.status-reviewed { background-color: #2196f3; color: #fff; }
+.status-accepted { background-color: #4caf50; color: #fff; }
+.status-rejected { background-color: #f44336; color: #fff; }
+
+.no-submissions {
+  text-align: center;
+  color: var(--green-accent);
+  padding: 3rem;
+  font-size: 1.2rem;
+}
+
+/*==========================================================
+  ---  SECCIÓN DE ANALYTICS  ---
+  ==========================================================*/
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background-color: var(--green-light);
+  color: var(--text-dark);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stat-icon {
+  font-size: 3rem;
+  opacity: 0.7;
+  color: var(--green-dark);
+}
+
+.stat-label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-top: 0.5rem;
+}
+
+.analytics-details {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.analytics-card {
+  background-color: var(--text-light);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--shadow-light);
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background-color: var(--bg-light);
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.status-item:hover {
+  background-color: #e0f2f1;
+}
+
+.status-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--green-dark);
+  margin-top: 0.5rem;
+}
+
+.cargo-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cargo-bar {
+  background-color: var(--green-medium);
+  color: var(--text-light);
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: width 0.5s ease-in-out;
+}

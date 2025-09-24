@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GLOBAL FINANCIAL MANAGEMENT S.A.S</title>
+  <link rel="icon" href="gfm.svg" type="image/svg+xml" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /*==========================================================
+      ---  PALETA DE COLORES Y VARIABLES  ---
+      ==========================================================*/
+    :root {
+      --green-dark: #2e7d32;
+      --green-medium: #4caf50;
+      --green-light: #81c784;
+      --green-accent: #689f38;
+      --bg-light: #f1f8e9;
+      --bg-dark: #1b5e20;
+      --text-dark: #333;
+      --text-light: #fff;
+      --border-color: #ccc;
+      --shadow-light: rgba(0, 0, 0, 0.1);
+      --shadow-heavy: rgba(0, 0, 0, 0.2);
+    }
+
+    /*==========================================================
+      ---  ESTILOS BASE Y GENERALES  ---
+      ==========================================================*/
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      background-color: var(--bg-light);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3 {
+      color: var(--green-dark);
+    }
+
+    a {
+      color: var(--green-medium);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--green-accent);
+    }
+
+    /*==========================================================
+      ---  CONTENEDOR PRINCIPAL  ---
+      ==========================================================*/
+    .content {
+      flex-grow: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    /* Esconde las secciones no activas con una transición */
+    .view {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    }
+
+    .view.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /*==========================================================
+      ---  SIDEBAR (Menú Lateral)  ---
+      ==========================================================*/
+    .sidebar {
+      width: 250px;
+      background-color: var(--green-dark);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      box-shadow: 2px 0 8px var(--shadow-heavy);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .brand img {
+      width: 90px;
+      height: auto;
+      margin-bottom: 0.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .brand img:hover {
+      transform: scale(1.05);
+    }
+
+    .brand h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--green-light);
+      letter-spacing: 1px;
+    }
+
+    .menu {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .menu-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1.25rem;
+      border: none;
+      background-color: transparent;
+      color: var(--bg-light);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
+    }
+
+    .menu-item.active {
+      background-color: var(--green-accent);
+      color: var(--text-light);
+      font-weight: 600;
+      box-shadow: 0 4px 6px var(--shadow-heavy);
+    }
+
+    .menu-item:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .contact {
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1.5rem;
+    }
+
+    .contact h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: var(--green-light);
+    }
+
+    .contact ul {
+      list-style: none;
+      font-size: 0.9rem;
+      color: var(--bg-light);
+      opacity: 0.8;
+    }
+
+    .contact li {
+      margin-bottom: 0.5rem;
+    }
+
+    .small {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-top: 1.5rem;
+    }
+
+    /*==========================================================
+      ---  SECCIONES DE CONTENIDO  ---
+      ==========================================================*/
+
+    /* HERO Section */
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 4rem 2rem;
+      background: linear-gradient(
+        135deg,
+        var(--green-medium),
+        var(--green-accent)
+      );
+      color: var(--text-light);
+      border-radius: 12px;
+      box-shadow: 0 6px 12px var(--shadow-light);
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .hero h2 {
+      font-size: 2.8rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--text-light);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px var(--shadow-light);
+      border-left: 6px solid var(--green-medium);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px var(--shadow-light);
+    }
+
+    .card h3 {
+      color: var(--green-dark);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--green-light);
+      padding-bottom: 0.75rem;
+    }
+
+    .bullets {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .bullets li {
+      margin-bottom: 0.75rem;
+      position: relative;
+      padding-left: 1.75rem;
+    }
+
+    .bullets li::before {
+      content: "🌿";
+      position: absolute;
+      left: 0;
+      color: var(--green-accent);
+    }
+
+    /*==========================================================
+      ---  FORMULARIOS (Registro, Login)  ---
+      ==========================================================*/
+    .form {
+      max-width: 500px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+      background-color: var(--text-light);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px var(--shadow-light);
+    }
+
+    .form h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--green-dark);
+    }
+
+    .form label {
+      display: block;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .form input {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form input:focus {
+      outline: none;
+      border-color: var(--green-medium);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--green-dark);
+      color: var(--text-light);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      margin-top: 2rem;
+    }
+
+    .btn:hover {
+      background-color: var(--green-accent);
+      transform: translateY(-2px);
+    }
+
+    .form-msg {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: var(--green-medium);
+    }
+
+    /*==========================================================
+      ---  SECCIÓN DE HOJA DE VIDA (CV)  ---
+      ==========================================================*/
+    .header {
+      background-color: var(--green-dark);
+      color: var(--text-light);
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 8px var(--shadow-heavy);
+      border-radius: 10px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--green-light);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-tab {
+      padding: 0.9rem 1.75rem;
+      border: none;
+      background-color: transparent;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .nav-tab:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-tab.active {
+      background-color: var(--green-accent);
+      font-weight: 600;
+      box-shadow: 0 2px 5px var(--shadow-heavy);
+      border-radius: 8px;
+    }
+
+    .dark-mode-btn {
+      background: none;
+      border: 1px solid var(--text-light);
+      color: var(--text-light);
+      padding: 0.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .dark-mode-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: rotate(360deg);
+    }
+
+    .main-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .form-container,
+    .submissions-header,
+    .analytics-grid,
+    .analytics-details,
+    .admin-container {
+      background-color: var(--text-light);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-light);
+      margin-bottom: 2rem;
+    }
+
+    .form-title,
+    .analytics-title,
+    .admin-title {
+      text-align: center;
+      color: var(--green-dark);
+      margin-bottom: 2rem;
+    }
+
+    .job-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-wrapper,
+    .textarea-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon,
+    .textarea-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--green-medium);
+    }
+
+    .job-form input,
+    .job-form select,
+    .job-form textarea {
+      width: 100%;
+      padding: 1rem;
+      padding-left: 45px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .job-form input:focus,
+    .job-form select:focus,
+    .job-form textarea:focus {
+      outline: none;
+      border-color: var(--green-medium);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+
+    .job-form textarea {
+      height: 120px;
+      padding: 1rem;
+      padding-left: 45px;
+      resize: vertical;
+    }
+
+    .social-section {
+      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+      margin-top: 2rem;
+    }
+
+    .file-upload {
+      border: 2px dashed var(--green-light);
+      padding: 3rem;
+      text-align: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .file-upload:hover {
+      border-color: var(--green-medium);
+      background-color: var(--bg-light);
+    }
+
+    .file-upload-area .fas {
+      font-size: 3rem;
+      color: var(--green-medium);
+      margin-bottom: 0.75rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /*==========================================================
+      ---  SECCIÓN DE SUBMISSIONS  ---
+      ==========================================================*/
+    .submissions-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .search-bar {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.75rem 0.75rem 0.75rem 3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--green-medium);
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filters select,
+    .filters button {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--bg-light);
+      cursor: pointer;
+    }
+
+    .submissions-list {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .submission-card {
+      background-color: var(--bg-light);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px var(--shadow-light);
+      border-left: 6px solid var(--green-medium);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .submission-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px var(--shadow-light);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      color: var(--green-dark);
+    }
+
+    .card-status {
+      padding: 0.3rem 0.9rem;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status-pending { background-color: #ffeb3b; color: #795548; }
+    .status-reviewed { background-color: #2196f3; color: #fff; }
+    .status-accepted { background-color: #4caf50; color: #fff; }
+    .status-rejected { background-color: #f44336; color: #fff; }
+
+    .no-submissions {
+      text-align: center;
+      color: var(--green-accent);
+      padding: 3rem;
+      font-size: 1.2rem;
+    }
+
+    /*==========================================================
+      ---  SECCIÓN DE ANALYTICS  ---
+      ==========================================================*/
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background-color: var(--green-light);
+      color: var(--text-dark);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .stat-icon {
+      font-size: 3rem;
+      opacity: 0.7;
+      color: var(--green-dark);
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--green-dark);
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-top: 0.5rem;
+    }
+
+    .analytics-details {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .analytics-card {
+      background-color: var(--text-light);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-light);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .status-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem;
+      border-radius: 8px;
+      background-color: var(--bg-light);
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .status-item:hover {
+      background-color: #e0f2f1;
+    }
+
+    .status-count {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--green-dark);
+      margin-top: 0.5rem;
+    }
+
+    .cargo-distribution {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .cargo-bar {
+      background-color: var(--green-medium);
+      color: var(--text-light);
+      padding: 0.75rem 1rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: width 0.5s ease-in-out;
+    }
+
+    /* Estilos del modal - No estaba en el CSS anterior, se agrega aquí */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: var(--text-light);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px var(--shadow-heavy);
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .modal-content h3 {
+        margin-bottom: 1rem;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-secondary {
+        background-color: var(--border-color);
+        color: var(--text-dark);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #aaa;
+    }
+
+    .btn-danger {
+        background-color: #f44336;
+        color: var(--text-light);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+
+    /*==========================================================
+      ---  HISTORIAL DE ADMINISTRADOR  ---
+      ==========================================================*/
+
+    .admin-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 2.5rem;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .history-table th {
+      background-color: var(--green-dark);
+      color: var(--text-light);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .history-table tr:hover {
+      background-color: var(--bg-light);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        body {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .brand {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .brand h1 {
+            font-size: 1.2rem;
+        }
+
+        .menu {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .contact {
+            padding-top: 1rem;
+            text-align: center;
+            border-top: none;
+        }
+
+        .contact h3 {
+            display: none;
+        }
+
+        .contact ul {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .content {
+            padding: 1rem;
+        }
+
+        .header-controls {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-tabs {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Menú lateral">
+    <div class="brand">
+      <img src="gfm.svg" alt="Logo GLOBAL FINANCIAL MANAGEMENT S.A.S" />
+      <h1>GFM S.A.S</h1>
+    </div>
+    <nav class="menu">
+      <button class="menu-item" data-target="home">Inicio</button>
+      <button class="menu-item" data-target="register">Registrarme</button>
+      <button class="menu-item" data-target="login">Iniciar sesión</button>
+      <button class="menu-item" data-target="cv" id="cvMenu" disabled>Hoja de vida</button>
+      <button class="menu-item" data-target="admin" id="adminMenu" style="display:none;">
+        <i class="fas fa-user-shield"></i> Administrador
+      </button>
+      <button class="menu-item" id="logout-btn" style="display:none;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </nav>
+    <footer class="contact">
+      <h3>Contacto</h3>
+      <ul>
+        <li><strong>NIT:</strong> 901731808-9</li>
+        <li><strong>Tel:</strong> 601 882 2371</li>
+        <li><strong>Email:</strong> GLOBALFINMAN@GMAIL.COM</li>
+        <li><strong>Dirección:</strong> Calle 44 No. 1-03 Este Torre 1 Apto 603, Soacha</li>
+      </ul>
+      <p class="small">© <span id="year"></span> GLOBAL FINANCIAL MANAGEMENT S.A.S</p>
+    </footer>
+  </aside>
+
+  <main class="content">
+    <section id="home" class="view active">
+      <header class="hero">
+        <h2>Global Financial Management S.A.S</h2>
+        <p>Asesorías financieras y pensionales con excelencia y confianza.</p>
+      </header>
+
+      <div class="grid">
+        <article class="card">
+          <h3>MISIÓN</h3>
+          <p>
+            Proporcionar asesoramiento y acompañamiento financiero y de seguros de calidad
+            superior, brindando soluciones personalizadas y confiables para ayudar a nuestros
+            clientes a alcanzar sus objetivos financieros y construir su mejor versión. Nos
+            esforzamos por ser socios de confianza, ofreciendo un servicio excepcional y
+            conocimientos especializados que les permitan tomar decisiones informadas y
+            maximizar su bienestar financiero a corto y largo plazo.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>VISIÓN</h3>
+          <p>
+            Ser líderes en asesoría financiera y de seguros, reconocidos por la excelencia,
+            innovación y compromiso con cada cliente, proporcionando soluciones integrales y
+            de vanguardia que se adapten a un entorno financiero dinámico; con ética,
+            profesionalismo y resultados sobresalientes.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Servicios</h3>
+          <ul class="bullets">
+            <li>Asesorías financieras y pensionales</li>
+            <li>Consultoría y planificación financiera</li>
+            <li>Gestión de seguros</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Datos de la empresa</h3>
+          <ul class="bullets">
+            <li><strong>Razón social:</strong> GLOBAL FINANCIAL MANAGEMENT S.A.S</li>
+            <li><strong>Tipo:</strong> PYME – Sector servicios</li>
+            <li><strong>Actividades económicas:</strong> 6621, 8110, 7820, 7010</li>
+            <li><strong>Nómina:</strong> 10 trabajadores</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="register" class="view">
+      <h2>Crear cuenta</h2>
+      <form id="registerForm" class="form">
+        <label>Nombre completo
+          <input type="text" name="name" required />
+        </label>
+        <label>Email
+          <input type="email" name="email" required />
+        </label>
+        <label>Contraseña
+          <input type="password" name="password" minlength="8" required />
+        </label>
+        <button type="submit" class="btn">Registrarme</button>
+        <p class="form-msg" id="registerMsg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="login" class="view">
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm" class="form">
+        <label>Email
+          <input type="email" name="email" required />
+        </label>
+        <label>Contraseña
+          <input type="password" name="password" required />
+        </label>
+        <button type="submit" class="btn">Entrar</button>
+        <p class="form-msg" id="loginMsg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="cv" class="view">
+      <header class="header">
+        <div class="container">
+          <h1 class="header-title">Sistema de Postulaciones</h1>
+          <div class="header-controls">
+            <nav class="nav-tabs">
+              <button class="nav-tab active" data-tab="form">
+                <i class="fas fa-file-text"></i>
+                Formulario
+              </button>
+              <button class="nav-tab" data-tab="submissions">
+                <i class="fas fa-users"></i>
+                Postulaciones (<span id="submissions-count">0</span>)
+              </button>
+              <button class="nav-tab" data-tab="analytics">
+                <i class="fas fa-chart-bar"></i>
+                Análisis
+              </button>
+            </nav>
+            <button id="dark-mode-toggle" class="dark-mode-btn">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+      <main class="main-content">
+        <div id="form-tab" class="tab-content active">
+          <div class="form-container">
+            <h2 class="form-title">Sube tu Hoja de Vida</h2>
+            <form id="job-application-form" class="job-form">
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" id="nombre" name="nombre" placeholder="Tu Nombre Completo" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-envelope input-icon"></i>
+                  <input type="email" id="email" name="email" placeholder="Correo Electrónico" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-phone input-icon"></i>
+                  <input type="tel" id="telefono" name="telefono" placeholder="Número de Teléfono">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <i class="fas fa-briefcase input-icon"></i>
+                  <select id="cargo" name="cargo" required>
+                    <option value="">Selecciona un cargo</option>
+                    <option value="Administrativo">Administrativo</option>
+                    <option value="Desarrollo">Desarrollo</option>
+                    <option value="Operarios">Operarios</option>
+                    <option value="Auxiliares">Auxiliares</option>
+                    <option value="Analistas">Analistas</option>
+                    <option value="Diseñador UX/UI">Diseñador UX/UI</option>
+                    <option value="Especialista en Marketing Digital">Especialista en Marketing Digital</option>
+                    <option value="Contador">Contador</option>
+                    <option value="Gerente de Proyectos">Gerente de Proyectos</option>
+                    <option value="Soporte Técnico">Soporte Técnico</option>
+                    <option value="Recursos Humanos">Recursos Humanos</option>
+                    <option value="Ventas">Ventas</option>
+                    <option value="Logística">Logística</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="textarea-wrapper">
+                  <i class="fas fa-briefcase textarea-icon"></i>
+                  <textarea id="experiencia" name="experiencia" placeholder="Describe tu experiencia laboral relevante (empresas, roles, logros...)" rows="4"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="textarea-wrapper">
+                  <i class="fas fa-graduation-cap textarea-icon"></i>
+                  <textarea id="educacion" name="educacion" placeholder="Tu formación académica (títulos, instituciones, años...)" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="textarea-wrapper">
+                  <i class="fas fa-file-text textarea-icon"></i>
+                  <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos algo más sobre ti o por qué eres el candidato ideal..." rows="5"></textarea>
+                </div>
+              </div>
+              <div class="social-section">
+                <h3>Tus Redes Sociales (Opcional)</h3>
+                <div class="form-group">
+                  <div class="input-wrapper">
+                    <i class="fab fa-facebook input-icon facebook-icon"></i>
+                    <input type="url" id="facebook" name="facebook" placeholder="URL de tu perfil de Facebook">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-wrapper">
+                    <i class="fab fa-twitter input-icon twitter-icon"></i>
+                    <input type="url" id="x" name="x" placeholder="URL de tu perfil de X (Twitter)">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-wrapper">
+                    <i class="fab fa-instagram input-icon instagram-icon"></i>
+                    <input type="url" id="instagram" name="instagram" placeholder="URL de tu perfil de Instagram">
+                  </div>
+                </div>
+              </div>
+              <div class="file-upload">
+                <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" hidden>
+                <div class="file-upload-area" onclick="document.getElementById('cvFile').click()">
+                  <i class="fas fa-upload"></i>
+                  <p id="file-upload-text">Arrastra tu CV aquí o haz clic para subir</p>
+                  <small>(PDF, DOC, DOCX - Máx. 5MB)</small>
+                </div>
+              </div>
+              <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i>
+                <span>Enviar Postulación</span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div id="submissions-tab" class="tab-content">
+          <div class="submissions-header">
+            <div class="search-filters">
+              <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-input" placeholder="Buscar por nombre, email, cargo, experiencia...">
+              </div>
+              <div class="filters">
+                <select id="status-filter">
+                  <option value="all">Todos los estados</option>
+                  <option value="pending">Pendiente</option>
+                  <option value="reviewed">Revisado</option>
+                  <option value="accepted">Aceptado</option>
+                  <option value="rejected">Rechazado</option>
+                </select>
+                <select id="cargo-filter">
+                  <option value="all">Todos los cargos</option>
+                </select>
+                <select id="rating-filter">
+                  <option value="all">Todas las calificaciones</option>
+                  <option value="5">5 estrellas</option>
+                  <option value="4">4+ estrellas</option>
+                  <option value="3">3+ estrellas</option>
+                  <option value="2">2+ estrellas</option>
+                  <option value="1">1+ estrellas</option>
+                </select>
+                <button id="clear-filters" class="clear-filters-btn">
+                  <i class="fas fa-filter"></i>
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+            <div id="submissions-list" class="submissions-list">
+              <div class="no-submissions">
+                <h3>¡Nadie se ha postulado aún!</h3>
+                <p>Sé el primero en enviar tu hoja de vida y aparecer aquí.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="analytics-tab" class="tab-content">
+          <h2 class="analytics-title">Análisis y Estadísticas</h2>
+          <div class="analytics-grid">
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-info">
+                  <p class="stat-label">Total Postulaciones</p>
+                  <p class="stat-value" id="total-submissions">0</p>
+                </div>
+                <i class="fas fa-users stat-icon"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-info">
+                  <p class="stat-label">Pendientes</p>
+                  <p class="stat-value" id="pending-count">0</p>
+                </div>
+                <i class="fas fa-clock stat-icon"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-info">
+                  <p class="stat-label">Aceptadas</p>
+                  <p class="stat-value" id="accepted-count">0</p>
+                </div>
+                <i class="fas fa-check-circle stat-icon"></i>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-content">
+                <div class="stat-info">
+                  <p class="stat-label">Calificación Promedio</p>
+                  <p class="stat-value" id="average-rating">0.0</p>
+                </div>
+                <i class="fas fa-star stat-icon"></i>
+              </div>
+            </div>
+          </div>
+          <div class="analytics-details">
+            <div class="analytics-card">
+              <h3><i class="fas fa-chart-pie"></i> Distribución por Estado</h3>
+              <div id="status-distribution" class="status-grid"></div>
+            </div>
+            <div class="analytics-card">
+              <h3><i class="fas fa-briefcase"></i> Postulaciones por Cargo</h3>
+              <div id="cargo-distribution"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+          <h3>¿Eliminar postulación?</h3>
+          <p>Esta acción no se puede deshacer. Se eliminará permanentemente la postulación.</p>
+          <div class="modal-actions">
+            <button id="cancel-delete" class="btn-secondary">Cancelar</button>
+            <button id="confirm-delete" class="btn-danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin" class="view">
+      <div class="admin-container">
+        <h2 class="admin-title">Historial de Actividad (Admin)</h2>
+        <div class="table-responsive">
+          <table id="history-table" class="history-table">
+            <thead>
+              <tr>
+                <th>Fecha y Hora</th>
+                <th>Usuario/Email</th>
+                <th>Acción</th>
+                <th>Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Global variables for user and application data
+    let users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+    let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || null;
+    let applications = JSON.parse(localStorage.getItem('jobApplications')) || [];
+    let history = JSON.parse(localStorage.getItem('siteHistory')) || [];
+
+    // Add admin user if not exists
+    const adminUserExists = users.some(user => user.email === 'admin@gfm.com');
+    if (!adminUserExists) {
+      users.push({ name: 'Administrador', email: 'admin@gfm.com', password: 'admin' });
+      localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
+    // DOM elements
+    const menuItems = document.querySelectorAll('.menu-item');
+    const views = document.querySelectorAll('.view');
+    const cvMenuBtn = document.getElementById('cvMenu');
+    const adminMenuBtn = document.getElementById('adminMenu');
+    const logoutBtn = document.getElementById('logout-btn');
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    const registerMsg = document.getElementById('registerMsg');
+    const loginMsg = document.getElementById('loginMsg');
+    const currentYear = document.getElementById('year');
+    const historyTableBody = document.querySelector('#history-table tbody');
+
+    // CV Section elements
+    const cvTabs = document.querySelectorAll('.nav-tab');
+    const cvTabContents = document.querySelectorAll('.tab-content');
+    const jobApplicationForm = document.getElementById('job-application-form');
+    const cvFile = document.getElementById('cvFile');
+    const fileUploadText = document.getElementById('file-upload-text');
+    const submissionsList = document.getElementById('submissions-list');
+    const submissionsCountSpan = document.getElementById('submissions-count');
+    const totalSubmissionsSpan = document.getElementById('total-submissions');
+    const pendingCountSpan = document.getElementById('pending-count');
+    const acceptedCountSpan = document.getElementById('accepted-count');
+    const averageRatingSpan = document.getElementById('average-rating');
+    const searchInput = document.getElementById('search-input');
+    const statusFilter = document.getElementById('status-filter');
+    const cargoFilter = document.getElementById('cargo-filter');
+    const ratingFilter = document.getElementById('rating-filter');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const statusDistributionDiv = document.getElementById('status-distribution');
+    const cargoDistributionDiv = document.getElementById('cargo-distribution');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    // --- Core Functions ---
+
+    /**
+     * Toggles the active view and menu item.
+     * @param {string} targetId - The ID of the section to show.
+     */
+    function showView(targetId) {
+      views.forEach(view => {
+        view.classList.remove('active');
+        if (view.id === targetId) {
+          view.classList.add('active');
+        }
+      });
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.target === targetId) {
+          item.classList.add('active');
+        }
+      });
+      // Update admin history view when admin section is shown
+      if (targetId === 'admin') {
+        renderAdminHistory();
+      }
+    }
+
+    /**
+     * Updates the UI based on the user's login status.
+     */
+    function updateUI() {
+      if (loggedInUser) {
+        cvMenuBtn.disabled = false;
+        logoutBtn.style.display = 'block';
+        if (loggedInUser.email === 'admin@gfm.com') {
+          adminMenuBtn.style.display = 'block';
+          cvMenuBtn.style.display = 'none'; // Optional: hide CV menu for admin
+        } else {
+          adminMenuBtn.style.display = 'none';
+          cvMenuBtn.style.display = 'block';
+        }
+        showView('home');
+      } else {
+        cvMenuBtn.disabled = true;
+        logoutBtn.style.display = 'none';
+        adminMenuBtn.style.display = 'none';
+        showView('login'); // Redirect to login after logout
+      }
+    }
+
+    /**
+     * Records an action in the site history.
+     * @param {string} action - The action performed (e.g., 'login', 'register', 'cv_submit').
+     * @param {object} details - An object with relevant details about the action.
+     */
+    function recordHistory(action, details) {
+      const timestamp = new Date().toLocaleString();
+      history.push({ timestamp, action, details });
+      localStorage.setItem('siteHistory', JSON.stringify(history));
+    }
+
+    /**
+     * Handles user registration.
+     * @param {Event} e - The form submission event.
+     */
+    function handleRegister(e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value;
+      const email = form.email.value;
+      const password = form.password.value;
+
+      const userExists = users.some(user => user.email === email);
+      if (userExists) {
+        registerMsg.textContent = 'Este email ya está registrado.';
+        registerMsg.style.color = 'red';
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem('registeredUsers', JSON.stringify(users));
+      recordHistory('Registro de usuario', { email, name });
+      registerMsg.textContent = '¡Registro exitoso! Ya puedes iniciar sesión.';
+      registerMsg.style.color = 'green';
+      form.reset();
+      showView('login');
+    }
+
+    /**
+     * Handles user login.
+     * @param {Event} e - The form submission event.
+     */
+    function handleLogin(e) {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value;
+      const password = form.password.value;
+
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
+        loggedInUser = user;
+        localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        recordHistory('Inicio de sesión', { email });
+        loginMsg.textContent = 'Inicio de sesión exitoso.';
+        loginMsg.style.color = 'green';
+        updateUI();
+        form.reset();
+      } else {
+        loginMsg.textContent = 'Email o contraseña incorrectos.';
+        loginMsg.style.color = 'red';
+      }
+    }
+
+    /**
+     * Handles user logout.
+     */
+    function handleLogout() {
+      if (loggedInUser) {
+        recordHistory('Cierre de sesión', { email: loggedInUser.email });
+      }
+      loggedInUser = null;
+      localStorage.removeItem('loggedInUser');
+      alert('Has cerrado sesión correctamente.');
+      updateUI();
+    }
+
+    // --- CV Section Functions ---
+
+    /**
+     * Renders a single job application card.
+     * @param {object} application - The application data.
+     */
+    function renderApplicationCard(application) {
+      const card = document.createElement('div');
+      card.className = 'submission-card';
+      card.setAttribute('data-id', application.id);
+      card.innerHTML = `
+        <div class="card-header">
+          <h4 class="card-title">${application.nombre}</h4>
+          <span class="card-status status-${application.status}">${application.status}</span>
+        </div>
+        <div class="card-content">
+          <p><strong>Cargo:</strong> ${application.cargo}</p>
+          <p><strong>Email:</strong> ${application.email}</p>
+          <p><strong>Teléfono:</strong> ${application.telefono || 'No proporcionado'}</p>
+          <div class="card-actions">
+            <button class="btn btn-review"><i class="fas fa-eye"></i> Ver Detalles</button>
+            <button class="btn btn-delete"><i class="fas fa-trash"></i> Eliminar</button>
+          </div>
+        </div>
+      `;
+      submissionsList.appendChild(card);
+    }
+
+    /**
+     * Renders all job applications based on current filters.
+     */
+    function renderApplications() {
+      submissionsList.innerHTML = '';
+      const filteredApplications = filterApplications();
+      if (filteredApplications.length > 0) {
+        filteredApplications.forEach(renderApplicationCard);
+        submissionsList.querySelector('.no-submissions')?.remove();
+      } else {
+        if (!submissionsList.querySelector('.no-submissions')) {
+          submissionsList.innerHTML = `<div class="no-submissions">
+            <h3>¡Nadie se ha postulado aún!</h3>
+            <p>Sé el primero en enviar tu hoja de vida y aparecer aquí.</p>
+          </div>`;
+        }
+      }
+    }
+
+    /**
+     * Filters applications based on search and select inputs.
+     * @returns {Array} - The filtered list of applications.
+     */
+    function filterApplications() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const status = statusFilter.value;
+      const cargo = cargoFilter.value;
+      const minRating = parseInt(ratingFilter.value) || 0;
+
+      return applications.filter(app => {
+        const matchesSearch = Object.values(app).some(value =>
+          String(value).toLowerCase().includes(searchTerm)
+        );
+        const matchesStatus = status === 'all' || app.status === status;
+        const matchesCargo = cargo === 'all' || app.cargo === cargo;
+        const matchesRating = minRating === 0 || app.rating >= minRating;
+
+        return matchesSearch && matchesStatus && matchesCargo && matchesRating;
+      });
+    }
+
+    /**
+     * Updates all analytics and stat cards.
+     */
+    function updateAnalytics() {
+      const pendingCount = applications.filter(app => app.status === 'pending').length;
+      const acceptedCount = applications.filter(app => app.status === 'accepted').length;
+      const totalRatings = applications.reduce((sum, app) => sum + (app.rating || 0), 0);
+      const ratedCount = applications.filter(app => app.rating).length;
+      const averageRating = ratedCount > 0 ? (totalRatings / ratedCount).toFixed(1) : '0.0';
+
+      submissionsCountSpan.textContent = applications.length;
+      totalSubmissionsSpan.textContent = applications.length;
+      pendingCountSpan.textContent = pendingCount;
+      acceptedCountSpan.textContent = acceptedCount;
+      averageRatingSpan.textContent = averageRating;
+
+      updateStatusDistribution();
+      updateCargoDistribution();
+      populateCargoFilter();
+    }
+
+    /**
+     * Updates the status distribution chart.
+     */
+    function updateStatusDistribution() {
+      statusDistributionDiv.innerHTML = '';
+      const statusCounts = applications.reduce((acc, app) => {
+        acc[app.status] = (acc[app.status] || 0) + 1;
+        return acc;
+      }, {});
+
+      ['pending', 'reviewed', 'accepted', 'rejected'].forEach(status => {
+        const count = statusCounts[status] || 0;
+        const total = applications.length;
+        const percentage = total > 0 ? ((count / total) * 100).toFixed(0) : 0;
+        const statusItem = document.createElement('div');
+        statusItem.className = `status-item status-${status}`;
+        statusItem.innerHTML = `
+          <span class="status-label">${status}</span>
+          <span class="status-count">${count} (${percentage}%)</span>
+        `;
+        statusDistributionDiv.appendChild(statusItem);
+      });
+    }
+
+    /**
+     * Updates the cargo distribution chart.
+     */
+    function updateCargoDistribution() {
+      cargoDistributionDiv.innerHTML = '';
+      const cargoCounts = applications.reduce((acc, app) => {
+        acc[app.cargo] = (acc[app.cargo] || 0) + 1;
+        return acc;
+      }, {});
+
+      for (const cargo in cargoCounts) {
+        const count = cargoCounts[cargo];
+        const bar = document.createElement('div');
+        bar.className = 'cargo-bar';
+        bar.style.width = `${(count / applications.length) * 100}%`;
+        bar.textContent = `${cargo}: ${count}`;
+        cargoDistributionDiv.appendChild(bar);
+      }
+    }
+
+    /**
+     * Populates the cargo filter dropdown with unique cargo values.
+     */
+    function populateCargoFilter() {
+      const cargoSet = new Set(applications.map(app => app.cargo));
+      const currentCargo = cargoFilter.value;
+      cargoFilter.innerHTML = '<option value="all">Todos los cargos</option>';
+      cargoSet.forEach(cargo => {
+        const option = document.createElement('option');
+        option.value = cargo;
+        option.textContent = cargo;
+        cargoFilter.appendChild(option);
+      });
+      cargoFilter.value = currentCargo;
+    }
+
+    // --- Admin Functions ---
+
+    /**
+     * Renders the admin history table.
+     */
+    function renderAdminHistory() {
+      historyTableBody.innerHTML = '';
+      history.forEach(item => {
+        const row = document.createElement('tr');
+        const detailsString = Object.entries(item.details).map(([key, value]) => `${key}: ${value}`).join(', ');
+        row.innerHTML = `
+          <td>${item.timestamp}</td>
+          <td>${item.details.email || 'N/A'}</td>
+          <td>${item.action}</td>
+          <td>${detailsString}</td>
+        `;
+        historyTableBody.appendChild(row);
+      });
+    }
+
+    // --- Event Listeners ---
+
+    // Navigation and section switching
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (!item.disabled) {
+          showView(item.dataset.target);
+        }
+      });
+    });
+
+    // Forms
+    registerForm.addEventListener('submit', handleRegister);
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // CV Section listeners
+    cvTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        cvTabs.forEach(t => t.classList.remove('active'));
+        cvTabContents.forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      });
+    });
+
+    jobApplicationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(jobApplicationForm);
+      const newApplication = {
+        id: Date.now(),
+        nombre: formData.get('nombre'),
+        email: formData.get('email'),
+        telefono: formData.get('telefono'),
+        cargo: formData.get('cargo'),
+        experiencia: formData.get('experiencia'),
+        educacion: formData.get('educacion'),
+        mensaje: formData.get('mensaje'),
+        facebook: formData.get('facebook'),
+        twitter: formData.get('x'),
+        instagram: formData.get('instagram'),
+        cvFile: cvFile.files.length > 0 ? cvFile.files[0].name : null,
+        status: 'pending',
+        rating: null
+      };
+
+      applications.push(newApplication);
+      localStorage.setItem('jobApplications', JSON.stringify(applications));
+      recordHistory('Envío de Hoja de Vida', { email: newApplication.email, nombre: newApplication.nombre, cargo: newApplication.cargo });
+      jobApplicationForm.reset();
+      fileUploadText.textContent = 'Arrastra tu CV aquí o haz clic para subir';
+      alert('Postulación enviada con éxito!');
+      renderApplications();
+      updateAnalytics();
+      showView('cv'); // Stay in CV section
+      cvTabs[1].click(); // Switch to submissions tab
+    });
+
+    cvFile.addEventListener('change', () => {
+      if (cvFile.files.length > 0) {
+        fileUploadText.textContent = `Archivo seleccionado: ${cvFile.files[0].name}`;
+      }
+    });
+
+    // Search and Filters
+    searchInput.addEventListener('input', renderApplications);
+    statusFilter.addEventListener('change', renderApplications);
+    cargoFilter.addEventListener('change', renderApplications);
+    ratingFilter.addEventListener('change', renderApplications);
+    clearFiltersBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      statusFilter.value = 'all';
+      cargoFilter.value = 'all';
+      ratingFilter.value = 'all';
+      renderApplications();
+    });
+
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', () => {
+      currentYear.textContent = new Date().getFullYear();
+      updateUI();
+      renderApplications();
+      updateAnalytics();
+    });
+  </script>
+</body>
+</html>
