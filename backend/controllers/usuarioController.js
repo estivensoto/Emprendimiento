@@ -1,34 +1,43 @@
-const { Usuario } = require("../models");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { Usuario } = require('../models');
 
-exports.registro = async (req, res) => {
+exports.registrar = async (req, res) => {
   try {
     const { nombre, correo, password } = req.body;
-    const existe = await Usuario.findOne({ where: { correo } });
-    if (existe) return res.status(400).json({ mensaje: "Correo ya registrado" });
 
-    const hash = await bcrypt.hash(password, 10);
-    const nuevo = await Usuario.create({ nombre, correo, password: hash });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    res.json({ id: nuevo.id, nombre: nuevo.nombre, correo: nuevo.correo });
-  } catch (e) {
-    res.status(500).json({ mensaje: "Error en el registro" });
+    const usuario = await Usuario.create({
+      nombre,
+      correo,
+      password: hashedPassword
+    });
+
+    res.json({ mensaje: 'Usuario registrado con éxito', usuario });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
 exports.login = async (req, res) => {
   try {
     const { correo, password } = req.body;
+
     const usuario = await Usuario.findOne({ where: { correo } });
-    if (!usuario) return res.status(400).json({ mensaje: "Credenciales inválidas" });
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
     const valido = await bcrypt.compare(password, usuario.password);
-    if (!valido) return res.status(400).json({ mensaje: "Credenciales inválidas" });
+    if (!valido) return res.status(401).json({ error: 'Contraseña incorrecta' });
 
-    const token = jwt.sign({ id: usuario.id, correo: usuario.correo }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    res.json({ token });
-  } catch (e) {
-    res.status(500).json({ mensaje: "Error en el login" });
+    const token = jwt.sign(
+      { id: usuario.id, correo: usuario.correo },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ mensaje: 'Login exitoso', token });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
